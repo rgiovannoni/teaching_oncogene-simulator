@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oncogene and tumor suppressor simulator</title>
+<style>
+:root{--bg:#faf9f5;--surface-1:#fff;--text-primary:#1f1e1d;--text-secondary:#5f5e5a;--border:#e3e1d8;--border-strong:#b4b2a9;--border-stronger:#888780;--bg-warning:#FAEEDA;--border-warning:#BA7517;--text-warning:#633806;--bg-danger:#FCEBEB;--border-danger:#E24B4A;--text-danger:#791F1F;--bg-success:#EAF3DE;--border-success:#639922;--text-success:#27500A;--radius:8px}
+@media (prefers-color-scheme:dark){:root{--bg:#1f1e1d;--surface-1:#2c2c2a;--text-primary:#f1efe8;--text-secondary:#b4b2a9;--border:#444441;--border-strong:#5f5e5a;--border-stronger:#888780;--bg-warning:#412402;--text-warning:#FAC775;--bg-danger:#501313;--text-danger:#F7C1C1;--bg-success:#173404;--text-success:#C0DD97}}
+*{box-sizing:border-box}
+body{margin:0;padding:24px 16px;background:var(--bg);color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
+.wrap{max-width:680px;margin:0 auto}
+h1{font-size:22px;font-weight:500;margin:0 0 4px}
+.intro{font-size:14px;color:var(--text-secondary);margin:0 0 8px}
+.hd,.row{display:grid;grid-template-columns:1fr 96px 1fr;gap:8px;align-items:center}
+.hd{font-size:13px;font-weight:500;color:var(--text-secondary);margin-bottom:8px}
+.row{margin-bottom:8px}
+.card{width:100%;text-align:left;font:inherit;cursor:pointer;padding:10px 12px;border-radius:var(--radius);background:var(--surface-1);border:0.5px solid var(--border-strong);color:var(--text-primary);display:block}
+.card:hover{border-color:var(--border-stronger)}
+.card .n{display:block;font-size:14px;font-weight:500}
+.card .g{display:block;font-size:12px;color:var(--text-secondary)}
+.card .s{display:block;font-size:12px;margin-top:4px;font-weight:500}
+.card.onc.on{background:var(--bg-warning);border-color:var(--border-warning);color:var(--text-warning)}
+.card.onc.on .g{color:var(--text-warning)}
+.card.sup.lost{background:var(--bg-danger);border-color:var(--border-danger);color:var(--text-danger)}
+.card.sup.lost .g{color:var(--text-danger)}
+.pill{text-align:center;font-size:12px;font-weight:500;padding:5px 4px;border-radius:var(--radius);border:0.5px solid}
+.pill.ok{background:var(--bg-success);border-color:var(--border-success);color:var(--text-success)}
+.pill.warn{background:var(--bg-warning);border-color:var(--border-warning);color:var(--text-warning)}
+.pill.bad{background:var(--bg-danger);border-color:var(--border-danger);color:var(--text-danger)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.btns button{font:inherit;font-size:13px;cursor:pointer;padding:6px 12px;border-radius:var(--radius);background:var(--surface-1);border:0.5px solid var(--border-strong);color:var(--text-primary)}
+.btns button:hover{border-color:var(--border-stronger)}
+.meter{display:flex;gap:4px;margin:12px 0 8px}
+.meter div{flex:1;height:8px;border-radius:4px;background:var(--border)}
+.meter div.f{background:var(--text-danger)}
+#msg{font-size:14px;color:var(--text-secondary);margin:0;min-height:44px}
+.note{font-size:12px;color:var(--text-secondary);margin-top:16px}
+@media (max-width:480px){.hd,.row{grid-template-columns:1fr 80px 1fr}.card{padding:8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Oncogenes and tumor suppressors</h1>
+<p class="intro">Switch oncogenes on (accelerators) and tumor suppressors off (brakes) in five pathways and see how many become deregulated.</p>
+<div class="btns">
+<button type="button" onclick="preset('reset')">Reset</button>
+<button type="button" onclick="preset('crc')">Colorectal-like</button>
+<button type="button" onclick="preset('mel')">Melanoma-like</button>
+</div>
+<div class="hd"><div>Oncogene (click to activate)</div><div></div><div>Tumor suppressor (click to inactivate)</div></div>
+<div class="row"><button type="button" class="card onc"><span class="n">RAS GTPases</span><span class="g">KRAS, HRAS, NRAS</span><span class="s"></span></button><div class="pill"></div><button type="button" class="card sup"><span class="n">NF1 (RAS-GAP)</span><span class="g">Switches RAS off</span><span class="s"></span></button></div>
+<div class="row"><button type="button" class="card onc"><span class="n">PI3K–AKT</span><span class="g">PIK3CA, AKT1</span><span class="s"></span></button><div class="pill"></div><button type="button" class="card sup"><span class="n">PTEN</span><span class="g">Degrades PIP3</span><span class="s"></span></button></div>
+<div class="row"><button type="button" class="card onc"><span class="n">Wnt–β-catenin</span><span class="g">CTNNB1</span><span class="s"></span></button><div class="pill"></div><button type="button" class="card sup"><span class="n">APC</span><span class="g">Destroys β-catenin</span><span class="s"></span></button></div>
+<div class="row"><button type="button" class="card onc"><span class="n">Cyclin D–CDK4</span><span class="g">CCND1, CDK4</span><span class="s"></span></button><div class="pill"></div><button type="button" class="card sup"><span class="n">p16 and RB</span><span class="g">CDKN2A, RB1</span><span class="s"></span></button></div>
+<div class="row"><button type="button" class="card onc"><span class="n">Anti-apoptotic</span><span class="g">BCL2, MCL1, MDM2</span><span class="s"></span></button><div class="pill"></div><button type="button" class="card sup"><span class="n">p53</span><span class="g">TP53: arrest, apoptosis</span><span class="s"></span></button></div>
+<div class="meter" id="meter"><div></div><div></div><div></div><div></div><div></div></div>
+<p id="msg" aria-live="polite"></p>
+<p class="note">Teaching aid: pathways are treated independently and any single hit counts as "Driven". Real tumors depend on cross-talk, dosage and context. Presets are simplified illustrations.</p>
+</div>
+<script>
+var rows=[].slice.call(document.querySelectorAll('.row'));
+var o=[0,0,0,0,0],s=[0,0,0,0,0];
+rows.forEach(function(r,i){
+ r.querySelector('.onc').onclick=function(){o[i]=1-o[i];render();};
+ r.querySelector('.sup').onclick=function(){s[i]=1-s[i];render();};
+});
+function render(){
+ var n=0;
+ rows.forEach(function(r,i){
+  var oc=r.querySelector('.onc'),sc=r.querySelector('.sup'),p=r.querySelector('.pill');
+  oc.classList.toggle('on',!!o[i]);oc.setAttribute('aria-pressed',!!o[i]);
+  sc.classList.toggle('lost',!!s[i]);sc.setAttribute('aria-pressed',!!s[i]);
+  oc.querySelector('.s').textContent=o[i]?'Activated (gain of function)':'Normal';
+  sc.querySelector('.s').textContent=s[i]?'Lost (loss of function)':'Functional';
+  var k=o[i]+s[i];
+  p.className='pill '+(k==0?'ok':k==1?'warn':'bad');
+  p.textContent=k==0?'Restrained':k==1?'Driven':'Unleashed';
+  if(k>0)n++;
+ });
+ var m=document.getElementById('meter').children;
+ for(var j=0;j<5;j++)m[j].className=j<n?'f':'';
+ var t;
+ if(n==0)t='All five pathways are restrained: normal growth homeostasis.';
+ else if(n<3)t=n+' of 5 pathways deregulated. Other checkpoints (p53, apoptosis, immune control) can still contain the cell.';
+ else t=n+' of 5 pathways deregulated: strong proliferative and survival drive, as in advanced tumors that accumulate multiple hits.';
+ document.getElementById('msg').textContent=t;
+}
+function preset(k){
+ if(k=='reset'){o=[0,0,0,0,0];s=[0,0,0,0,0];}
+ if(k=='crc'){o=[1,0,0,0,0];s=[0,0,1,0,1];}
+ if(k=='mel'){o=[1,0,0,0,0];s=[0,1,0,1,0];}
+ render();
+}
+render();
+</script>
+</body>
+</html>
