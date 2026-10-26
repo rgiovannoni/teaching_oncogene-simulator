@@ -82,7 +82,7 @@ function render(){
  for(var j=0;j<5;j++)m[j].className=j<n?'f':'';
  var t;
  if(n==0)t='All five pathways are restrained: normal growth homeostasis.';
- else if(n<3)t=n+' of 5 pathways deregulated. Other checkpoints (p53, apoptosis, immune control) can still contain the cell.';
+ else if(n<3)t=n+' of 5 pathways deregulated. Other checkpoints ('+(s[4]?'apoptosis, immune control':'p53, apoptosis, immune control')+') can still contain the cell.';
  else t=n+' of 5 pathways deregulated: strong proliferative and survival drive, as in advanced tumors that accumulate multiple hits.';
  document.getElementById('msg').textContent=t;
 }
